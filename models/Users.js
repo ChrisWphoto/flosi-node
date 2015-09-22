@@ -2,9 +2,10 @@ var mongoose = require('mongoose');
 
 var UserSchema = new mongoose.Schema({
   username: {type: String, lowercase: true, unique: true},
-  email: String,
-  friendName: String,
+  email:       String,
+  friendName:  String,
   friendEmail: String,
+  task:        String,
   taskCompleted: {type: Number, default: 0}
 });
 
