@@ -32,20 +32,32 @@ router.post('/users', function (req,res,next) {
 
 //Check if user was invited and send back match
 //if no match save user name and email as new user
-//@needs work
 router.put('/register', function(req,res,next){
   User.findOne({friendName: req.body.username}, function (err, match) {
-    if (err) return next(err);
-    if (match) res.json(match);
-    else {
-      var user = new User(req.body);
-      user.save(function (err,user) {
-        if(err) return next(err);
-        res.json(user);
-      });
+    if (err) {
+      console.log('error ' + err);
+      return next(err);
     }
+    if (match){
+      console.log('match ' + match);
+       res.json(match);
+     }
+    else {saveUser(req.body, res);}
   });
 });
+
+//General method for saving a user object to mongo
+var saveUser = function(userInfo, res){
+    var user = new User(userInfo);
+    user.save(function (err,user) {
+      if(err) {
+        console.log('error ' + err);
+        return next(err);
+      }
+      console.log('Saving New User ' + user);
+      res.json(user);
+    });
+};
 
 //Plus 1 to users complted task
 router.put('/taskCompleted', function (req,res,next) {
