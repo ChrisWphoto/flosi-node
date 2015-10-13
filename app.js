@@ -5,13 +5,15 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var passport = require('passport');
+//var FacebookStrategy = require('passport-facebook').Strategy;
 
 //Connect mongolab Database
 mongoose.connect('mongodb://chris:1techtwo@ds051843.mongolab.com:51843/flosi-mongo');
 
 
 require('./models/Users');
-
+require('./config/passport')(passport);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -29,6 +31,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 app.use('/', routes);
 app.use('/users', users);

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'flosi-api' });
@@ -8,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
-
+var passport = require('passport');
 //get all users
 router.get('/users', function (req,res,next) {
   console.log('Getting all Users /users');
@@ -29,6 +30,17 @@ router.post('/users', function (req,res,next) {
     res.json(user);
   });
 });
+
+//send to facebook and request email + profile info
+router.get('/auth/facebook', passport.authenticate('facebook',
+  { scope : 'email,public_profile' }));
+
+// handle the callback after facebook has authenticated the user
+router.get('/auth/facebook/callback',
+    passport.authenticate('facebook', {
+        successRedirect : '/users',
+        failureRedirect : '/'
+    }));
 
 //Check if user was invited and send back match
 //if no match save user name and email as new user

@@ -6,7 +6,14 @@ var UserSchema = new mongoose.Schema({
   friendName:  String,
   friendEmail: String,
   task:        String,
-  taskCompleted: {type: Number, default: 0}
+  taskCompleted: {type: Number, default: 0},
+
+  facebook         : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    }
 });
 
 UserSchema.methods.complete = function(cb) {
